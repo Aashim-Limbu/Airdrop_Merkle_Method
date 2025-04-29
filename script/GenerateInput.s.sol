@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
+/**
+ * @title Populate User for AirDrop
+ * @author Aashim Limbu
+ * @notice This will generate the input for merkle tree. The address that are present in Merkle Tree will be able to claim the airdrop
+ */
 
 import {Script} from "forge-std/Script.sol";
 import {stdJson} from "forge-std/StdJson.sol";
