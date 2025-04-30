@@ -8,7 +8,7 @@ remappings = [
     "@foundry-devops=lib/foundry-devops"
     ]
 fs_permissions=[
-    { access="read-write",path="./script" }
+    { access="read-write",path="./" }
     # {access="read",path="./"},
     # {access="write",path="./"}
 ]

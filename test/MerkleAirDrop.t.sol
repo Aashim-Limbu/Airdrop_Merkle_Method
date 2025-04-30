@@ -13,6 +13,7 @@ contract MerkleAridopTest is ZkSyncChainChecker, Test {
     bytes32 public ROOT = 0xaa5d581231e596618465a56aa0f5870ba6e20785fe436d5bfb82b08662ccc7c4; // first generate input and then generate output and copy the root hash damn it!! .
     uint256 public AMOUNT_TO_CLAIM = 25 * 1e18;
     uint256 public AMOUNT_TO_SEND = AMOUNT_TO_CLAIM * 4;
+    address sponsor;
     address user;
     uint256 userPrivateKey;
     bytes32[] public PROOF = [
@@ -34,14 +35,20 @@ contract MerkleAridopTest is ZkSyncChainChecker, Test {
             // Thus the address must be in Merkle Tree.
         }
         (user, userPrivateKey) = makeAddrAndKey("user");
+        sponsor = makeAddr("gasPayer");
     }
 
     function testUserCanClaim() public {
         // console.log("The address of user is ",user); // add the user address to merkle input by adding it to whitelist in MerkleAirdrop script contract .
         uint256 startingBalance = token.balanceOf(user);
+        bytes32 digest = merkleAirdrop.getMessageHash(user, AMOUNT_TO_CLAIM);
+        // vm.prank(user);
+        // sign a message
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(userPrivateKey, digest);
 
-        vm.prank(user);
-        merkleAirdrop.claim(user, AMOUNT_TO_CLAIM, PROOF);
+        //gasPayer/sponsor calls claim using the signed message
+        vm.prank(sponsor);
+        merkleAirdrop.claim(user, AMOUNT_TO_CLAIM, PROOF, v, r, s);
         uint256 endingBalance = token.balanceOf(user);
         console.log("ending balance: ", endingBalance);
         assertEq(endingBalance - startingBalance, AMOUNT_TO_CLAIM);
