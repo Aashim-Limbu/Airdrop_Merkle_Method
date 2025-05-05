@@ -14,7 +14,7 @@ TOKEN_ADDRESS := 0x5FbDB2315678afecb367f032d93F642f64180aa3
 
 # zkSync constants
 
-ROOT := 0x474d994c58e37b12085fdb7bc6bbcd046cf1907b90de3b7fb083cf3636c8ebfb
+ROOT := 0xaa5d581231e596618465a56aa0f5870ba6e20785fe436d5bfb82b08662ccc7c4
 PROOF_1 := 0xd1445c931158119b00449ffcac3c947d028c0c359c34a6646d95962b3b55c6ad
 PROOF_2 := 0x46f4c7c1c21e8a90c03949beda51d2d02d1ec75b55dd97a999d3edbafa5a1e2f
 AIRDROP_AMOUNT := 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
@@ -63,10 +63,10 @@ deploy:
 
 # As of writing, the Alchemy zkSync RPC URL is not working correctly
 deploy-zk:
-	forge create src/MerkleAirdrop.sol:MerkleAirdrop --rpc-url http://127.0.0.1:8011 --private-key ${DEFAULT_ZKSYNC_LOCAL_KEY} --constructor-args ${ROOT} $(shell forge create src/BagelToken.sol:BagelToken --rpc-url http://127.0.0.1:8011 --private-key ${DEFAULT_ZKSYNC_LOCAL_KEY} --legacy --zksync | grep "Deployed to:" | awk '{print $$3}') --legacy --zksync
+	forge create src/MerkleAirdrop.sol:MerkleAirdrop --rpc-url http://127.0.0.1:8011 --private-key ${DEFAULT_ZKSYNC_LOCAL_KEY} --constructor-args ${ROOT} $(shell forge create src/Token.sol:Token --rpc-url http://127.0.0.1:8011 --private-key ${DEFAULT_ZKSYNC_LOCAL_KEY} --legacy --zksync | grep "Deployed to:" | awk '{print $$3}') --legacy --zksync
 
 deploy-zk-sepolia:
-	forge create src/MerkleAirdrop.sol:MerkleAirdrop --rpc-url ${ZKSYNC_SEPOLIA_RPC_URL} --constructor-args ${ROOT} $(shell forge create src/BagelToken.sol:BagelToken --rpc-url ${ZKSYNC_SEPOLIA_RPC_URL} --account default --legacy --zksync | grep "Deployed to:" | awk '{print $$3}') --account default --legacy --zksync
+	forge create src/MerkleAirdrop.sol:MerkleAirdrop --rpc-url ${ZKSYNC_SEPOLIA_RPC_URL} --constructor-args ${ROOT} $(shell forge create src/Token.sol:Token --rpc-url ${ZKSYNC_SEPOLIA_RPC_URL} --account default --legacy --zksync | grep "Deployed to:" | awk '{print $$3}') --account default --legacy --zksync
 
 # Generate Merkle Tree input file
 generate :; forge script script/GenerateInput.s.sol:GenerateInput

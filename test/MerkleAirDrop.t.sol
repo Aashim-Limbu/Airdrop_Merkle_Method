@@ -39,7 +39,6 @@ contract MerkleAridopTest is ZkSyncChainChecker, Test {
     }
 
     function testUserCanClaim() public {
-        // console.log("The address of user is ",user); // add the user address to merkle input by adding it to whitelist in MerkleAirdrop script contract .
         uint256 startingBalance = token.balanceOf(user);
         bytes32 digest = merkleAirdrop.getMessageHash(user, AMOUNT_TO_CLAIM);
         // vm.prank(user);

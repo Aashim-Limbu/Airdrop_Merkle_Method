@@ -16,6 +16,11 @@ contract ClaimAirdrop is Script {
     ];
     bytes private SIGNATURE =
         hex"fbd2270e6f23fb5fe9248480c0f4be8a4e9bd77c3ad0b1333cc60b5debc511602a2a06c24085d8d7c038bad84edc53664c8ce0346caeaa3570afec0e61144dc11c"; // 0x being removed
+    // total 128 hex character as pair of hex character fb, d2 etc represent 1 bytes.
+    // r → 32 bytes
+    // s → 32 bytes
+    // v → 1 byte
+    // Total = 65 bytes
 
     function run() external {
         address mostRecentlyDeployedAirdrop = DevOpsTools.get_most_recent_deployment("MerkleAirdrop", block.chainid);
@@ -33,6 +38,7 @@ contract ClaimAirdrop is Script {
         if (sig.length != 65) {
             revert ClaimAirdrop__InvalidSignature(); // 32+32+1 = 65
         }
+        console.log("Signature length: ", sig.length);
         assembly {
             r := mload(add(sig, 32))
             s := mload(add(sig, 64))
