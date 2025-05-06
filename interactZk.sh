@@ -12,8 +12,8 @@ PROOF_2="0xe5ebd1e1b5a5478a944ecab36a9a954ac3b6b8216875f6524caa7a1d87096576"
 
 
 # Compile and deploy Token contract
-echo "Running anvil zkSync local node..."
-anvil-zksync
+# echo "Running anvil zkSync local node..."
+# anvil-zksync
 echo "Deploying token contract..."
 TOKEN_ADDRESS=$(forge create src/Token.sol:Token --rpc-url http://0.0.0.0:8011 --private-key ${CLAIMER_PRIVATE_KEY}  --zksync | awk '/Deployed to:/ {print $3}' )
 echo "Token contract deployed at: $TOKEN_ADDRESS"
@@ -31,6 +31,8 @@ echo "Signing message..."
 SIGNATURE=$(cast wallet sign --private-key ${CLAIMER_PRIVATE_KEY} --no-hash ${MESSAGE_HASH})
 CLEAN_SIGNATURE=$(echo "$SIGNATURE" | sed 's/^0x//')
 echo -n "$CLEAN_SIGNATURE" >> signature.txt
+sync  # force file system to flush.Flushing means forcing the OS to write that buffered data to disk immediately, making it available for other processes.
+sleep 0.5  # give it time to propagate
 
 # Split signature
 SIGN_OUTPUT=$(forge script script/SplitSignature.s.sol:SplitSignature)
